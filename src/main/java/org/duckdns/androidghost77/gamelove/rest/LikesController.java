@@ -2,8 +2,10 @@ package org.duckdns.androidghost77.gamelove.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.duckdns.androidghost77.gamelove.dto.GameResponse;
+import org.duckdns.androidghost77.gamelove.security.dto.UserPrincipal;
 import org.duckdns.androidghost77.gamelove.service.LikesService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,20 +26,23 @@ public class LikesController {
     @PostMapping("/{gameId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void likeGame(@PathVariable("gameId") String gameId) {
-        String userId = "test"; //TODO: get from JWT token
-        likesService.likeGame(gameId, userId);
+        likesService.likeGame(gameId, getUserId());
     }
 
     @DeleteMapping("/{gameId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unlikeGame(@PathVariable("gameId") String gameId) {
-        String userId = "test"; //TODO: get from JWT token
-        likesService.unlikeGame(gameId, userId);
+        likesService.unlikeGame(gameId, getUserId());
     }
 
     @GetMapping("/my-games")
     public List<GameResponse> getMyLikes() {
-        String userId = "test"; //TODO: get from JWT token
-        return likesService.getGamesLikedByUser(userId);
+        return likesService.getGamesLikedByUser(getUserId());
+    }
+
+    private String getUserId() {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return userPrincipal.getId();
     }
 }

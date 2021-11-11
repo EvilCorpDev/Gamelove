@@ -14,7 +14,8 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
-public class Like {
+public class Likes {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

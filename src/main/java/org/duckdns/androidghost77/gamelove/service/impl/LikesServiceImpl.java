@@ -10,7 +10,7 @@ import org.duckdns.androidghost77.gamelove.repository.GameRepository;
 import org.duckdns.androidghost77.gamelove.repository.LikesRepository;
 import org.duckdns.androidghost77.gamelove.repository.UserRepository;
 import org.duckdns.androidghost77.gamelove.repository.model.Game;
-import org.duckdns.androidghost77.gamelove.repository.model.Like;
+import org.duckdns.androidghost77.gamelove.repository.model.Likes;
 import org.duckdns.androidghost77.gamelove.repository.model.User;
 import org.duckdns.androidghost77.gamelove.service.LikesService;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class LikesServiceImpl implements LikesService {
                 .orElseThrow(() -> new UserNotFoundException(String.format("User with id %s was not found", userId),
                         userId));
 
-        Like like = new Like();
+        Likes like = new Likes();
         like.setGame(game);
         like.setUser(user);
 
@@ -45,7 +45,7 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public void unlikeGame(String gameId, String userId) {
-        Like like = likesRepository.findLikeByGameAndUser(gameId, userId)
+        Likes like = likesRepository.findLikeByGameAndUser(gameId, userId)
                 .orElseThrow(() -> new LikeNotFoundException(
                         String.format("Game %s wasn't liked by user %s", gameId, userId)));
         likesRepository.delete(like);
