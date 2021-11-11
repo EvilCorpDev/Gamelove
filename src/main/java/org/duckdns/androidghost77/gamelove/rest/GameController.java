@@ -6,6 +6,7 @@ import org.duckdns.androidghost77.gamelove.dto.GameResponse;
 import org.duckdns.androidghost77.gamelove.service.GameService;
 import org.duckdns.androidghost77.gamelove.validation.annotation.ValidUuid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponse addNewGame(@RequestBody GameRequest newGame) {
         return gameService.addGame(newGame);
@@ -44,6 +46,7 @@ public class GameController {
     }
 
     @DeleteMapping("/{gameId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGameById(@PathVariable("gameId") @ValidUuid String gameId) {
         gameService.deleteGame(gameId);

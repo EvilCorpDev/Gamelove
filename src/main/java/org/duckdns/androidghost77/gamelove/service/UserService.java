@@ -7,6 +7,8 @@ public interface UserService {
 
     UserResponse createUser(UserRequest userRequest);
 
+    UserResponse createAdmin(UserRequest userRequest);
+
     UserResponse findUserById(String id);
 
     UserResponse findUserByUsername(String username);
