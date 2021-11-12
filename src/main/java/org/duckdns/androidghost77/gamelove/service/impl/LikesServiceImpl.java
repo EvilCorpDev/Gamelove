@@ -3,7 +3,6 @@ package org.duckdns.androidghost77.gamelove.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.duckdns.androidghost77.gamelove.dto.GameResponse;
 import org.duckdns.androidghost77.gamelove.exception.GameNotFoundException;
-import org.duckdns.androidghost77.gamelove.exception.LikeNotFoundException;
 import org.duckdns.androidghost77.gamelove.exception.UserNotFoundException;
 import org.duckdns.androidghost77.gamelove.mapper.GameMapper;
 import org.duckdns.androidghost77.gamelove.repository.GameRepository;
@@ -47,10 +46,8 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public void unlikeGame(String gameId, String userId) {
-        Likes like = likesRepository.findLikeByGameAndUser(gameId, userId)
-                .orElseThrow(() -> new LikeNotFoundException(
-                        String.format("Game %s wasn't liked by user %s", gameId, userId)));
-        likesRepository.delete(like);
+        likesRepository.findLikeByGameAndUser(gameId, userId)
+                .ifPresent(likesRepository::delete);
     }
 
     @Override

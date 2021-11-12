@@ -11,8 +11,6 @@ public interface UserService {
 
     void deleteUser(String userId);
 
-    UserResponse getCurrentUser();
-
     UserResponse findUserById(String id);
 
     UserResponse findUserByUsername(String username);

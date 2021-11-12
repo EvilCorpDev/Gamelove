@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.duckdns.androidghost77.gamelove.dto.UserRequest;
 import org.duckdns.androidghost77.gamelove.dto.UserResponse;
 import org.duckdns.androidghost77.gamelove.enums.UserRoleType;
+import org.duckdns.androidghost77.gamelove.security.dto.UserPrincipal;
 import org.duckdns.androidghost77.gamelove.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,10 @@ public class UserController {
 
     @GetMapping("/current")
     public UserResponse getCurrentUser() {
-        return userService.getCurrentUser();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return userService.findUserById(userPrincipal.getId());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

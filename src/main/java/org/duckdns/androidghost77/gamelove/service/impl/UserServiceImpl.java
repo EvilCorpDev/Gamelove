@@ -9,11 +9,9 @@ import org.duckdns.androidghost77.gamelove.security.dto.UserPrincipal;
 import org.duckdns.androidghost77.gamelove.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +21,12 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    @Transactional
     public void createUser(UserRequest userRequest) {
         saveUser(userRequest);
     }
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN')")
-    @Transactional
     public void createAdmin(UserRequest userRequest) {
         saveUser(userRequest);
     }
@@ -38,12 +34,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         userDetailsManager.deleteUserById(userId);
-    }
-
-    public UserResponse getCurrentUser() {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        return userMapper.userPrincipalToUserResponse(userPrincipal);
     }
 
     @Override
