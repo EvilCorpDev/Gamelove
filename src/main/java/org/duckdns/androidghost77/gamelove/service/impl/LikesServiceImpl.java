@@ -10,9 +10,11 @@ import org.duckdns.androidghost77.gamelove.repository.GameRepository;
 import org.duckdns.androidghost77.gamelove.repository.LikesRepository;
 import org.duckdns.androidghost77.gamelove.repository.UserRepository;
 import org.duckdns.androidghost77.gamelove.repository.model.Game;
+import org.duckdns.androidghost77.gamelove.repository.model.GameLikes;
 import org.duckdns.androidghost77.gamelove.repository.model.Likes;
 import org.duckdns.androidghost77.gamelove.repository.model.User;
 import org.duckdns.androidghost77.gamelove.service.LikesService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -58,7 +60,7 @@ public class LikesServiceImpl implements LikesService {
                 .map(it -> it.getGame().getId())
                 .collect(Collectors.toList());
 
-        if(!gameIds.isEmpty()) {
+        if (!gameIds.isEmpty()) {
             return gameRepository.findAllById(gameIds)
                     .stream()
                     .map(gameMapper::gameToGameResponse)
@@ -66,6 +68,13 @@ public class LikesServiceImpl implements LikesService {
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<GameLikes> getMostLikedGames(int maxSize) {
+        return likesRepository.getMostLikedGames(PageRequest.of(0, maxSize))
+                .get()
+                .collect(Collectors.toList());
     }
 
 }

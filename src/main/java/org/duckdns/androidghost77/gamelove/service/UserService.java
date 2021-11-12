@@ -5,9 +5,13 @@ import org.duckdns.androidghost77.gamelove.dto.UserResponse;
 
 public interface UserService {
 
-    UserResponse createUser(UserRequest userRequest);
+    void createUser(UserRequest userRequest);
 
-    UserResponse createAdmin(UserRequest userRequest);
+    void createAdmin(UserRequest userRequest);
+
+    void deleteUser(String userId);
+
+    UserResponse getCurrentUser();
 
     UserResponse findUserById(String id);
 

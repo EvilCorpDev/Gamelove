@@ -20,10 +20,19 @@ public class UserPrincipal implements UserDetails {
     private String id;
     private String username;
     private String password;
+    private String email;
     private List<? extends GrantedAuthority> authorities = Collections.emptyList();
 
     public UserRoleType getUserRole() {
         return UserRoleType.valueOf(this.authorities.get(0).getAuthority());
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

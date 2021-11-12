@@ -1,5 +1,6 @@
 package org.duckdns.androidghost77.gamelove.config;
 
+import org.duckdns.androidghost77.gamelove.mapper.UserMapper;
 import org.duckdns.androidghost77.gamelove.repository.UserRepository;
 import org.duckdns.androidghost77.gamelove.repository.UserRoleRepository;
 import org.duckdns.androidghost77.gamelove.security.DbUserDetailsManager;
@@ -21,9 +22,9 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public DbUserDetailsManager userDetailsManager(
-            UserRepository userRepo, UserRoleRepository userRoleRepository, BCryptPasswordEncoder passwordEncoder) {
-        return new DbUserDetailsManager(userRepo, userRoleRepository, passwordEncoder);
+    public DbUserDetailsManager userDetailsManager(UserMapper userMapper, UserRepository userRepo,
+            UserRoleRepository userRoleRepository, BCryptPasswordEncoder passwordEncoder) {
+        return new DbUserDetailsManager(userMapper, userRepo, userRoleRepository, passwordEncoder);
     }
 
     @Bean

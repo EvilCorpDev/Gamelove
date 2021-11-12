@@ -6,6 +6,7 @@ import static java.util.Collections.singletonList;
 import lombok.RequiredArgsConstructor;
 import org.duckdns.androidghost77.gamelove.enums.UserRoleType;
 import org.duckdns.androidghost77.gamelove.exception.UserNotFoundException;
+import org.duckdns.androidghost77.gamelove.mapper.UserMapper;
 import org.duckdns.androidghost77.gamelove.repository.UserRepository;
 import org.duckdns.androidghost77.gamelove.repository.UserRoleRepository;
 import org.duckdns.androidghost77.gamelove.repository.model.User;
@@ -17,13 +18,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import javax.transaction.Transactional;
+
 @RequiredArgsConstructor
 public class DbUserDetailsManager implements UserDetailsManager {
 
     private static final String DEFAULT_USER_NAME = "admin";
     private static final String DEFAULT_USER_PASS = "nimda";
     private static final String DEFAULT_USER_ID = "default_id";
+    private static final String DEFAULT_USER_EMAIL = "default_email@gmail.com";
     private static final UserRoleType DEFAULT_USER_ROLE = UserRoleType.ADMIN;
+
+    private final UserMapper userMapper;
     private final UserRepository userRepo;
     private final UserRoleRepository userRoleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -34,21 +40,22 @@ public class DbUserDetailsManager implements UserDetailsManager {
 
         if (usersInDb == 0) {
             return new UserPrincipal(DEFAULT_USER_ID, DEFAULT_USER_NAME, passwordEncoder.encode(DEFAULT_USER_PASS),
-                    emptyList());
+                    DEFAULT_USER_EMAIL, emptyList());
         }
 
         User dbUser = userRepo.findUserByUsername(username);
         if (dbUser == null) {
             throw new UsernameNotFoundException(String.format("Can't find user with username: %s", username));
         }
-        return new UserPrincipal(dbUser.getId(), dbUser.getUsername(), dbUser.getPasswordHash(), emptyList());
+        return new UserPrincipal(dbUser.getId(), dbUser.getUsername(), dbUser.getPasswordHash(),
+                dbUser.getEmail(), emptyList());
     }
 
 
     public UserDetails loadUserById(String userId) {
         if (userId.equals(DEFAULT_USER_ID)) {
             return new UserPrincipal(DEFAULT_USER_ID, DEFAULT_USER_NAME, passwordEncoder.encode(DEFAULT_USER_PASS),
-                    singletonList(new SimpleGrantedAuthority(DEFAULT_USER_ROLE.toString())));
+                    DEFAULT_USER_EMAIL, singletonList(new SimpleGrantedAuthority(DEFAULT_USER_ROLE.toString())));
         }
 
         User userById = userRepo.findById(userId)
@@ -59,16 +66,21 @@ public class DbUserDetailsManager implements UserDetailsManager {
                 .orElse(UserRoleType.USER);
 
         return new UserPrincipal(userById.getId(), userById.getUsername(), userById.getPasswordHash(),
-                singletonList(new SimpleGrantedAuthority(role.toString())));
+                userById.getEmail(), singletonList(new SimpleGrantedAuthority(role.toString())));
     }
 
     @Override
-    public void createUser(UserDetails user) {
-        User dbUser = new User();
-        dbUser.setUsername(user.getUsername());
-        dbUser.setPasswordHash(passwordEncoder.encode(user.getPassword()));
+    @Transactional
+    public void createUser(UserDetails userDetails) {
+        UserPrincipal userRequest = (UserPrincipal) userDetails;
+        User user = userMapper.userPrincipalToUser(userRequest);
+        user.setPasswordHash(passwordEncoder.encode(userRequest.getPassword()));
 
-        userRepo.save(dbUser);
+        user = userRepo.save(user);
+        UserRole role = new UserRole();
+        role.setUser(user);
+        role.setUserRoleType(userRequest.getUserRole());
+        userRoleRepository.save(role);
     }
 
     @Override
@@ -79,6 +91,10 @@ public class DbUserDetailsManager implements UserDetailsManager {
     @Override
     public void deleteUser(String username) {
         userRepo.deleteByUsername(username);
+    }
+
+    public void deleteUserById(String userId) {
+        userRepo.deleteById(userId);
     }
 
     @Override

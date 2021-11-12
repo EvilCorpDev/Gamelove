@@ -29,3 +29,7 @@ logging:
 jwt:
     secret: "Rl7$u!&0k7Fb"
     expirationInMs: 1800000
+
+page:
+    size:
+        max: 10
