@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.duckdns.androidghost77.gamelove.dto.GameRequest;
 import org.duckdns.androidghost77.gamelove.dto.GameResponse;
 import org.duckdns.androidghost77.gamelove.service.GameService;
-import org.duckdns.androidghost77.gamelove.validation.annotation.ValidUuid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +35,7 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public GameResponse findGameById(@PathVariable("gameId") @ValidUuid String gameId) {
+    public GameResponse findGameById(@PathVariable("gameId") String gameId) {
         return gameService.findGameById(gameId);
     }
 
@@ -48,7 +47,7 @@ public class GameController {
     @DeleteMapping("/{gameId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGameById(@PathVariable("gameId") @ValidUuid String gameId) {
+    public void deleteGameById(@PathVariable("gameId") String gameId) {
         gameService.deleteGame(gameId);
     }
 }
