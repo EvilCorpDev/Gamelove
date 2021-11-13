@@ -28,5 +28,4 @@ Api description is available under `localhost/gamelove/swagger-ui.html` and sear
 Some operations can be done only through admin user: 
 - creating admin user
 - adding games
-- delete games
 - etc.
