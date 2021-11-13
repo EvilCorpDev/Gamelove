@@ -33,3 +33,6 @@ jwt:
 page:
     size:
         max: 10
+springdoc:
+    api-docs:
+        path: /api-docs

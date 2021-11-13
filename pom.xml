@@ -24,6 +24,7 @@
         <org.junit.version>5.8.1</org.junit.version>
         <org.mockito.version>4.0.0</org.mockito.version>
         <org.assertj.version>3.21.0</org.assertj.version>
+        <org.springdoc.springdoc-openapi-ui.version>1.5.12</org.springdoc.springdoc-openapi-ui.version>
     </properties>
 
     <dependencyManagement>
@@ -64,7 +65,11 @@
             <artifactId>jjwt</artifactId>
             <version>${io.jsonwebtoken.jjwt.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${org.springdoc.springdoc-openapi-ui.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
