@@ -19,23 +19,14 @@ We want you to implement a game love service that keeps track of the games that 
             * The game identifier.
             * Number of loves the game has.
 
-## Deliverables:
-
-Your submission should contain a Java service based Maven project solution. Avoid sending large attachments in your submission so do a maven clean before submission.
-
-In this case, we recommend you to make use of spring boot as a starting point for your application.
-
-In addition, in order for us to test your solution; make use of an embedded database like H2 or Sqlite, using a local file database scheme with your working solution.
-
-We look forward to your solution and appreciate your time applying with us!
-
-## More info
-
-We encourage you to use [Spring Boot](https://spring.io/projects/spring-boot) in this test.
-
-## Found a bug?
-
-Pull requests welcome, and maybe [we have a job for you](http://jobs.comeon.com/)? :)
-
-## How to Submit the Home Assignment
-Please, send us your code in a compressed file in an email with the code project.
+## How to
+App contains several controllers. GameController, UserController, LikesController 
+and AuthController. At first start when there is no users, default admin:nimda user is available.
+First you need to create admin user and then with the help of new user you can create other users, games etc.
+To make operations you need to log in through AuthController and use provided jwtToken with Bearer auth.
+Api description is available under `localhost/gamelove/swagger-ui.html` and search for `/gamelove/api-docs`.
+Some operations can be done only through admin user: 
+- creating admin user
+- adding games
+- delete games
+- etc.
