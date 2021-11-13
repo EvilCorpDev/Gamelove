@@ -9,8 +9,6 @@ public interface UserService {
 
     void createAdmin(UserRequest userRequest);
 
-    void deleteUser(String userId);
-
     UserResponse findUserById(String id);
 
     UserResponse findUserByUsername(String username);

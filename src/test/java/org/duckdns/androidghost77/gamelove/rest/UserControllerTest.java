@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -176,41 +175,6 @@ class UserControllerTest {
 
         assertThat(actualResult.getResponse().getContentAsString())
                 .isEqualTo(objectMapper.writeValueAsString(userResponse));
-    }
-
-    @Test
-    @WithUserDetails("admin")
-    void deleteUserById() throws Exception {
-        //given
-        String userId = UUID.randomUUID().toString();
-
-        //then
-        mvc.perform(delete("/users/{userId}", userId))
-                .andExpect(status().isNoContent());
-
-        verify(userRepository).deleteById(userId);
-    }
-
-    @Test
-    @WithMockUser(value = "test", password = "pass", authorities = "USER")
-    void deleteUserById_Forbidden() throws Exception {
-        //given
-        String userId = UUID.randomUUID().toString();
-        String shortMessage = "You are not allowed to access this resource";
-        String message = "Access is denied";
-
-        //then
-        MvcResult actualResult = mvc.perform(delete("/users/{userId}", userId))
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        ExceptionMessageDto response = objectMapper.readValue(actualResult.getResponse().getContentAsString(),
-                ExceptionMessageDto.class);
-        assertThat(response.getMessage()).isEqualTo(message);
-        assertThat(response.getShortMessage()).isEqualTo(shortMessage);
-        assertThat(response.getTimestamp()).isNotNull();
-
-        verifyNoInteractions(userRepository);
     }
 
     @Test

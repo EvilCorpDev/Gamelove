@@ -68,16 +68,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deleteUser() {
-        //given
-        String userId = UUID.randomUUID().toString();
-
-        //then
-        userService.deleteUser(userId);
-        verify(userDetailsManager).deleteUserById(userId);
-    }
-
-    @Test
     void findUserById() {
         //given
         String userId = UUID.randomUUID().toString();

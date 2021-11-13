@@ -32,11 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String userId) {
-        userDetailsManager.deleteUserById(userId);
-    }
-
-    @Override
     public UserResponse findUserById(String id) {
         return userMapper.userPrincipalToUserResponse(
                 (UserPrincipal) userDetailsManager.loadUserById(id));

@@ -41,9 +41,4 @@ public class GameServiceImpl implements GameService {
                 .map(gameMapper::gameToGameResponse)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public void deleteGame(String id) {
-        gameRepository.deleteById(id);
-    }
 }

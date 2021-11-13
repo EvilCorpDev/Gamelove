@@ -144,15 +144,4 @@ class GameServiceImplTest {
         List<GameResponse> actualResponse = gameService.findGamesByName(name);
         assertThat(actualResponse).isEqualTo(Arrays.asList(firstResponse, secondResponse));
     }
-
-    @Test
-    void deleteGameById() {
-        //given
-        String id = UUID.randomUUID().toString();
-
-        //then
-        gameService.deleteGame(id);
-        verify(gameRepository).deleteById(stringCaptor.capture());
-        assertThat(stringCaptor.getValue()).isEqualTo(id);
-    }
 }

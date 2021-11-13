@@ -12,6 +12,4 @@ public interface GameService {
     GameResponse findGameById(String id);
 
     List<GameResponse> findGamesByName(String name);
-
-    void deleteGame(String id);
 }

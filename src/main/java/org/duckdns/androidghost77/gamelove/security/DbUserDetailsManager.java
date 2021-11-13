@@ -93,10 +93,6 @@ public class DbUserDetailsManager implements UserDetailsManager {
         userRepo.deleteByUsername(username);
     }
 
-    public void deleteUserById(String userId) {
-        userRepo.deleteById(userId);
-    }
-
     @Override
     public void changePassword(String oldPassword, String newPassword) {
         throw new UnsupportedOperationException("Not implemented");

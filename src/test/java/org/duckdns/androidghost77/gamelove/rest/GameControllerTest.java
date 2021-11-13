@@ -6,7 +6,6 @@ import static org.duckdns.androidghost77.gamelove.GameHelper.DEFAULT_GAME_ID;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +37,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GameloveApplication.class)
@@ -122,48 +120,6 @@ class GameControllerTest {
         String response = actualResult.getResponse().getContentAsString();
 
         assertThat(response).isEqualTo(objectMapper.writeValueAsString(List.of(expectedResponse)));
-    }
-
-    @Test
-    @WithMockUser(value = "test", password = "pass", authorities = "ADMIN")
-    void deleteGameById() throws Exception {
-        //given
-        String gameId = UUID.randomUUID().toString();
-
-        //when
-        when(gameRepository.findAllByName((String.format("%%%s%%", DEFAULT_GAME.getName()))))
-                .thenReturn(List.of(DEFAULT_GAME));
-
-        //then
-        mvc.perform(delete("/games/{gameId}", gameId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent())
-                .andReturn();
-
-        verify(gameRepository).deleteById(gameId);
-    }
-
-    @Test
-    @WithMockUser(value = "test", password = "pass", authorities = "USER")
-    void deleteGameById_Forbidden() throws Exception {
-        //given
-        String gameId = UUID.randomUUID().toString();
-        String shortMessage = "You are not allowed to access this resource";
-        String message = "Access is denied";
-
-        //then
-        MvcResult actualResult = mvc.perform(delete("/games/{gameId}", gameId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden())
-                .andReturn();
-
-        ExceptionMessageDto response = objectMapper.readValue(actualResult.getResponse().getContentAsString(),
-                ExceptionMessageDto.class);
-        assertThat(response.getMessage()).isEqualTo(message);
-        assertThat(response.getShortMessage()).isEqualTo(shortMessage);
-        assertThat(response.getTimestamp()).isNotNull();
-
-        verifyNoInteractions(gameRepository);
     }
 
     @Test
