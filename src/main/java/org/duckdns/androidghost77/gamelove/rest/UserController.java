@@ -53,6 +53,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable("userId") String userId) {
         userService.deleteUser(userId);
     }

@@ -6,10 +6,9 @@ import org.duckdns.androidghost77.gamelove.exception.handler.ExceptionHandlingMa
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.nio.file.AccessDeniedException;
 
 @Configuration
 public class ExceptionMappingConfig {
@@ -21,7 +20,7 @@ public class ExceptionMappingConfig {
                 .add(MethodArgumentNotValidException.class, this::getFieldError, "Filed invalid", HttpStatus.BAD_REQUEST)
                 .add(BadCredentialsException.class, Exception::getMessage, "Invalid credentials", HttpStatus.UNAUTHORIZED)
                 .add(MalformedJwtException.class, exc -> "You're not authorized, please login", "Unauthorized", HttpStatus.UNAUTHORIZED)
-                .add(AccessDeniedException.class, Exception::getMessage, "Access denied", HttpStatus.UNAUTHORIZED)
+                .add(AccessDeniedException.class, Exception::getMessage, "You are not allowed to access this resource", HttpStatus.FORBIDDEN)
                 .build();
     }
 

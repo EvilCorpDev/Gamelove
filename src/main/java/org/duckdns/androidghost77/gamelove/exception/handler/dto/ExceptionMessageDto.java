@@ -1,15 +1,17 @@
 package org.duckdns.androidghost77.gamelove.exception.handler.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExceptionMessageDto {
 
-    private final String shortMessage;
-    private final String message;
+    private String shortMessage;
+    private String message;
     private final ZonedDateTime timestamp = ZonedDateTime.now();
 }

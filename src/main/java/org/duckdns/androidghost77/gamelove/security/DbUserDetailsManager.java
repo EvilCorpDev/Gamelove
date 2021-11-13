@@ -40,7 +40,7 @@ public class DbUserDetailsManager implements UserDetailsManager {
 
         if (usersInDb == 0) {
             return new UserPrincipal(DEFAULT_USER_ID, DEFAULT_USER_NAME, passwordEncoder.encode(DEFAULT_USER_PASS),
-                    DEFAULT_USER_EMAIL, emptyList());
+                    DEFAULT_USER_EMAIL, singletonList(new SimpleGrantedAuthority(DEFAULT_USER_ROLE.toString())));
         }
 
         User dbUser = userRepo.findUserByUsername(username);
